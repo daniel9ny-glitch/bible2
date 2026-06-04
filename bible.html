@@ -375,11 +375,12 @@ body.dark .creed-tab.active{ color:#15140f; }
 }
 .creed-title{
   font-family:var(--ui-font);font-size:16px;font-weight:700;
-  color:var(--gold);margin:0 0 12px;letter-spacing:0.01em;
+  color:var(--gold);margin:0 0 12px;letter-spacing:0.01em;text-align:center;
 }
 .creed-body p{
   font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:16.5px;line-height:1.67;
-  letter-spacing:-0.5px;transform:scaleX(0.97);transform-origin:left;
+  letter-spacing:-0.5px;transform:scaleX(0.97);transform-origin:center;
+  text-align:center;
   color:var(--verse-ink);margin:0 0 2px;word-break:keep-all;
 }
 .creed-body p:last-child{ margin-top:8px;font-weight:700;color:var(--gold); }
@@ -4101,7 +4102,7 @@ function findBook(n){ return bible.B.find(b => b[0] === n); }
 // 주기도문 / 사도신경 (한국 교회 표준 예식문)
 const PRAYER_CREED = {
   lords_new: {
-    title: '주기도문 (새번역)',
+    title: '주기도문 (개역개정)',
     body: [
       '하늘에 계신 우리 아버지,',
       '아버지의 이름을 거룩하게 하시며',
@@ -4119,7 +4120,7 @@ const PRAYER_CREED = {
     ]
   },
   lords_old: {
-    title: '주기도문 (전통)',
+    title: '주기도문 (개역한글)',
     body: [
       '하늘에 계신 우리 아버지여',
       '이름이 거룩히 여김을 받으시오며',
@@ -4137,7 +4138,7 @@ const PRAYER_CREED = {
     ]
   },
   apostles_new: {
-    title: '사도신경 (새번역)',
+    title: '사도신경 (개역개정)',
     body: [
       '나는 전능하신 아버지 하나님,',
       '천지의 창조주를 믿습니다.',
@@ -4159,7 +4160,7 @@ const PRAYER_CREED = {
     ]
   },
   apostles_old: {
-    title: '사도신경 (전통)',
+    title: '사도신경 (개역한글)',
     body: [
       '전능하사 천지를 만드신 하나님 아버지를 내가 믿사오며,',
       '그 외아들 우리 주 예수 그리스도를 믿사오니,',
