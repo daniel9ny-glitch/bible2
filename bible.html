@@ -940,7 +940,7 @@ body.theme-eink .rr-plan{ color:#000;font-weight:700; }
 
 /* ----------------- Reading screen ----------------- */
 .reading-screen{
-  padding:12px 12px calc(80px + env(safe-area-inset-bottom,0)) 12px;
+  padding:12px 6px calc(80px + env(safe-area-inset-bottom,0)) 6px;
   max-width:var(--reading-width);margin:0 auto;
 }
 .chapter-title{
@@ -1085,6 +1085,7 @@ body.fs-10 .cr-syn-vnum{font-size:18.4px;}
   grid-template-columns:26px 1fr;
   column-gap:10px;row-gap:3.8px;
   align-items:baseline;
+  margin-left:-3px;margin-right:3px;
 }
 .verse-row .vnum{
   grid-column:1;grid-row:1;
@@ -1103,7 +1104,7 @@ body.fs-10 .cr-syn-vnum{font-size:18.4px;}
   word-break:keep-all;
   overflow-wrap:break-word;
   letter-spacing:-1px;
-  transform:scaleX(0.97);transform-origin:left center;width:103.09%;
+  transform:scaleX(0.985);transform-origin:left center;width:101.52%;
 }
 .verse-row .modern{
   grid-column:2;grid-row:2;
@@ -2129,7 +2130,7 @@ body[data-font-k="serif"] .verse-row .kjv .vtext{ font-size:calc(var(--serif-sca
 body[data-font-k="sans"] .verse-row .kjv{
   font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;
   letter-spacing:-0.7px;
-  transform:scaleX(0.97);transform-origin:left center;width:103.09%;
+  transform:scaleX(0.985);transform-origin:left center;width:101.52%;
 }
 body[data-font-k="sans"] .verse-row .kjv .vtext{ font-size:calc(var(--sans-scale) * 1em); }
 body[data-font-k="ridi"] .verse-row .kjv{
@@ -2148,7 +2149,7 @@ body[data-font-m="serif"] .verse-row .modern .vtext{ font-size:calc(var(--serif-
 body[data-font-m="sans"] .verse-row .modern{
   font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;
   letter-spacing:-0.7px;
-  transform:scaleX(0.97);transform-origin:left center;width:103.09%;
+  transform:scaleX(0.985);transform-origin:left center;width:101.52%;
 }
 body[data-font-m="sans"] .verse-row .modern .vtext{ font-size:calc(var(--sans-scale) * 1em); }
 body[data-font-m="ridi"] .verse-row .modern{
@@ -2167,7 +2168,7 @@ body[data-font-s="serif"] .verse-row .std .vtext{ font-size:calc(var(--serif-sca
 body[data-font-s="sans"] .verse-row .std{
   font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;
   letter-spacing:-0.7px;
-  transform:scaleX(0.97);transform-origin:left center;width:103.09%;
+  transform:scaleX(0.985);transform-origin:left center;width:101.52%;
 }
 body[data-font-s="sans"] .verse-row .std .vtext{ font-size:calc(var(--sans-scale) * 1em); }
 body[data-font-s="ridi"] .verse-row .std{
@@ -6423,6 +6424,13 @@ function _updateScrollChrome(){
   const delta = y - _scLastY;
   _scLastY = y;
   if(y <= SC_MIN_Y){
+    showScrollChrome();
+    _resetScrollAccum();
+    return;
+  }
+  // 스크롤이 끝까지 내려왔으면 위로 올리지 않아도 상하단 바 자동 표시
+  const atBottom = y + window.innerHeight >= document.documentElement.scrollHeight - 8;
+  if(atBottom){
     showScrollChrome();
     _resetScrollAccum();
     return;
