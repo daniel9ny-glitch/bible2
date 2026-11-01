@@ -220,7 +220,7 @@ button{font:inherit;cursor:pointer;color:inherit;}
        (×0.95) 보정: 세리프 0.9060, 리디바탕 0.9213
      산세리프는 기준이므로 보정 없음(1.0). fs단계가 달라져도 같은 비율로
      적용된다. 재조정이 필요하면 이 세 값만 바꾸면 됨. */
-  --sans-scale:0.935;   /* 0.912 → 0.930 → 0.949 → 0.935 (산세리프 +2%, +2%, -1.5%) */
+  --sans-scale:0.931;   /* 0.912 → 0.930 → 0.949 → 0.935 → 0.926 → 0.931 (산세리프 +2%, +2%, -1.5%, -1%, +0.5%) */
   --serif-scale:0.906;
   --ridi-scale:0.9213;
 
@@ -2385,7 +2385,7 @@ body[data-font-k="serif"] .verse-row .kjv .vtext{ font-size:calc(var(--serif-sca
 body[data-font-k="sans"] .verse-row .kjv{
   font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;
   letter-spacing:-0.3px;
-  transform:scaleX(0.995);transform-origin:left center;width:100.5%;
+  transform:scaleX(0.99);transform-origin:left center;width:101.01%;
 }
 body[data-font-k="sans"] .verse-row .kjv .vtext{ font-size:calc(var(--sans-scale) * 1em); }
 body[data-font-k="ridi"] .verse-row .kjv{
@@ -2404,7 +2404,7 @@ body[data-font-m="serif"] .verse-row .modern .vtext{ font-size:calc(var(--serif-
 body[data-font-m="sans"] .verse-row .modern{
   font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;
   letter-spacing:-0.3px;
-  transform:scaleX(0.995);transform-origin:left center;width:100.5%;
+  transform:scaleX(0.99);transform-origin:left center;width:101.01%;
 }
 body[data-font-m="sans"] .verse-row .modern .vtext{ font-size:calc(var(--sans-scale) * 1em); }
 body[data-font-m="ridi"] .verse-row .modern{
@@ -2423,7 +2423,7 @@ body[data-font-s="serif"] .verse-row .std .vtext{ font-size:calc(var(--serif-sca
 body[data-font-s="sans"] .verse-row .std{
   font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;
   letter-spacing:-0.3px;
-  transform:scaleX(0.995);transform-origin:left center;width:100.5%;
+  transform:scaleX(0.99);transform-origin:left center;width:101.01%;
 }
 body[data-font-s="sans"] .verse-row .std .vtext{ font-size:calc(var(--sans-scale) * 1em); }
 body[data-font-s="ridi"] .verse-row .std{
