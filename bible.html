@@ -581,16 +581,16 @@ body.theme-eink.dark .search-btn{ color:#000 !important; }
 :root {
   --app-max-width: 980px;
   /* 바(상단·하단) 폭: 항상 화면을 거의 꽉 채운다(여백 조절과 무관). */
-  --bar-width: min(1600px, 98vw);
+  --bar-width: min(1600px, calc(98 * var(--dvw,1vw)));
   /* 본문 가독 폭: 여백 조절 토글(rmargin)로만 바뀐다. 기본 '보통'. */
-  --reading-width: min(1120px, 88vw);
+  --reading-width: min(1120px, calc(88 * var(--dvw,1vw)));
 }
 /* 본문 좌우 여백 5단계 — 본문 폭(--reading-width)만 조절. 바 폭은 그대로 둔다. */
-body.rmargin-0{ --reading-width: min(1500px, 96vw); }  /* 넓게 */
-body.rmargin-1{ --reading-width: min(1300px, 92vw); }  /* 조금넓게 */
-body.rmargin-2{ --reading-width: min(1120px, 84vw); }  /* 보통 */
-body.rmargin-3{ --reading-width: min(940px, 74vw); }   /* 조금좁게 */
-body.rmargin-4{ --reading-width: min(760px, 62vw); }   /* 좁게 */
+body.rmargin-0{ --reading-width: min(1500px, calc(96 * var(--dvw,1vw))); }  /* 넓게 */
+body.rmargin-1{ --reading-width: min(1300px, calc(92 * var(--dvw,1vw))); }  /* 조금넓게 */
+body.rmargin-2{ --reading-width: min(1120px, calc(84 * var(--dvw,1vw))); }  /* 보통 */
+body.rmargin-3{ --reading-width: min(940px, calc(74 * var(--dvw,1vw))); }   /* 조금좁게 */
+body.rmargin-4{ --reading-width: min(760px, calc(62 * var(--dvw,1vw))); }   /* 좁게 */
 /* 좁은 화면(폰·폴더블 닫힘 등 640px 미만)에서는 여백 단계를 무시하고 화면을 꽉 채운다.
    넓은 화면에서 정한 여백이 좁은 화면까지 따라와 본문이 과하게 좁아지는 것을 방지. */
 @media (max-width:639px){
@@ -3950,7 +3950,7 @@ body.immersive .worship-view-screen{ padding-bottom:12px !important; }
    · 상하 여백: 좌우 여백과 '같은 크기'로 둘러, 스크롤 중간에서도 항상 동일한 틀 여백이 보이게 함.
    · 악보(찬송가/경배찬양/셋리스트) 전체보기는 이 규칙의 영향을 받지 않음(.reading-screen 한정).
    --cr-im-pad: 좌우·상하 공통 여백. 모바일은 일반 보기와 같은 12px, 화면이 커지면 비례 확대. */
-body.immersive{ --cr-im-pad: clamp(12px, 3vw, 120px); }
+body.immersive{ --cr-im-pad: clamp(12px, calc(3 * var(--dvw,1vw)), 120px); }
 body.immersive:not(.page-mode) #app{ max-width:none !important; }
 body.immersive:not(.page-mode) .reading-screen{
   max-width:var(--reading-width) !important;   /* 일반 모드와 동일 폭으로 통일 */
@@ -5272,7 +5272,157 @@ html.plat-ipad .bottom-nav{
 }
 html.plat-ipad .bottom-nav button{ padding-top:8px; padding-bottom:8px; }
 html.plat-ipad .bottom-nav .nav-mid{ padding-top:6px; padding-bottom:6px; }
+
+/*AI-CSS-BEGIN*/
+/* ===== 늘성경 AI 도우미 ===== */
+/* ---- 도킹 시 본문 영역 조정: 도우미가 차지하는 만큼 화면 폭·높이를 줄인다 ---- */
+body.ai-dk{ margin-left:var(--dk-l,0px) !important; margin-right:var(--dk-r,0px) !important; margin-bottom:var(--dk-b,0px) !important; }
+body.ai-dk .bottom-nav,
+body.ai-dk .sel-bar,
+body.ai-dk .ws-viewbar{
+  left:var(--dk-l,0px); right:var(--dk-r,0px); bottom:var(--dk-b,0px);
+  padding-left:12px; padding-right:12px;
+}
+body.ai-dk #tts-bar{
+  left:calc(var(--dk-l,0px) + (100vw - var(--dk-l,0px) - var(--dk-r,0px)) / 2);
+  bottom:calc(64px + var(--dk-b,0px) + env(safe-area-inset-bottom, 0px));
+  max-width:calc(100vw - var(--dk-l,0px) - var(--dk-r,0px) - 24px);
+}
+body.ai-dk .toast{
+  left:calc(var(--dk-l,0px) + (100vw - var(--dk-l,0px) - var(--dk-r,0px)) / 2);
+  bottom:calc(80px + var(--dk-b,0px) + env(safe-area-inset-bottom,0));
+}
+body.ai-dk.immersive .immersive-modebar{ right:calc(10px + var(--dk-r,0px)); }
+body.ai-dk.immersive .immersive-ttsbar{ left:calc(10px + var(--dk-l,0px)); right:auto; }
+body.ai-dk.page-mode.immersive .reading-screen::before,
+body.ai-dk.page-mode.immersive .reading-screen::after{ left:var(--dk-l,0px); right:var(--dk-r,0px); }
+body.ai-dk.page-mode.immersive .reading-screen::after{ bottom:var(--dk-b,0px); }
+body.ai-dk.page-mode.immersive .page-tapzone{ bottom:var(--dk-b,0px); }
+body.ai-dk.page-mode.immersive .page-tapzone.left{ left:var(--dk-l,0px); }
+body.ai-dk.page-mode.immersive .page-tapzone.right{ right:var(--dk-r,0px); }
+
+/* ---- 플로팅 버튼 ---- */
+#ai-fab{
+  position:fixed; left:0; top:0; z-index:9050;
+  width:50px; height:50px; border-radius:50%;
+  border:0; padding:0; display:grid; place-items:center;
+  background:var(--gold,#3f5c4c); color:#fff;
+  box-shadow:0 6px 18px rgba(0,0,0,.28), 0 0 0 1px rgba(255,255,255,.14) inset;
+  cursor:grab; touch-action:none;
+  -webkit-user-select:none; user-select:none; -webkit-touch-callout:none;
+  transition:opacity .7s ease, transform .15s ease, box-shadow .2s;
+  opacity:1;
+}
+#ai-fab svg{ width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; pointer-events:none; }
+#ai-fab.idle{ opacity:.10; box-shadow:none; }
+#ai-fab.drag{ cursor:grabbing; transform:scale(1.08); transition:transform .15s; }
+#ai-fab[hidden]{ display:none; }
+body.theme-eink #ai-fab{ background:#111; color:#fff; box-shadow:none; border:1px solid #111; }
+
+/* ---- 도우미 창 (도킹) ---- */
+#ai-dock{
+  position:fixed; z-index:10010;
+  display:flex; flex-direction:column;
+  background:var(--bg); color:var(--text);
+  font-family:var(--ui-font); font-size:14px;
+  box-shadow:0 0 28px rgba(0,0,0,.18);
+  -webkit-user-select:text; user-select:text;
+  min-width:0; min-height:0;
+}
+#ai-dock[hidden]{ display:none; }
+#ai-dock[data-side="right"]{ top:0; right:0; bottom:0; width:var(--aid-w,380px); border-left:1px solid var(--line); padding-top:var(--sat,env(safe-area-inset-top,0px)); padding-right:env(safe-area-inset-right,0px); }
+#ai-dock[data-side="left"]{ top:0; left:0; bottom:0; width:var(--aid-w,380px); border-right:1px solid var(--line); padding-top:var(--sat,env(safe-area-inset-top,0px)); padding-left:env(safe-area-inset-left,0px); }
+#ai-dock[data-side="bottom"]{ left:0; right:0; bottom:var(--aid-kb,0px); height:var(--aid-h,46vh); border-top:1px solid var(--line); border-radius:14px 14px 0 0; }
+.aid-grip{ position:absolute; z-index:3; touch-action:none; }
+#ai-dock[data-side="right"] .aid-grip{ left:-8px; top:0; bottom:0; width:16px; cursor:col-resize; }
+#ai-dock[data-side="left"] .aid-grip{ right:-8px; top:0; bottom:0; width:16px; cursor:col-resize; }
+#ai-dock[data-side="bottom"] .aid-grip{ left:0; right:0; top:-10px; height:20px; cursor:row-resize; }
+.aid-grip::after{ content:''; position:absolute; border-radius:3px; background:var(--line); transition:background .15s; }
+#ai-dock[data-side="right"] .aid-grip::after,
+#ai-dock[data-side="left"] .aid-grip::after{ top:50%; left:6px; width:4px; height:46px; margin-top:-23px; }
+#ai-dock[data-side="bottom"] .aid-grip::after{ left:50%; top:8px; width:46px; height:4px; margin-left:-23px; }
+.aid-grip:hover::after, .aid-grip.drag::after{ background:var(--gold); }
+
+.aid-head{ position:relative; display:flex; align-items:center; gap:4px; padding:7px 8px 7px 14px; border-bottom:1px solid var(--line); background:var(--nav-bg,var(--bg)); flex:none; }
+.aid-head b{ font-size:14.5px; font-weight:700; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.aid-head b small{ font-weight:500; font-size:11.5px; color:var(--text-soft,#777); margin-left:6px; }
+.aid-ib{ width:32px; height:32px; border:0; border-radius:8px; background:none; color:var(--text-soft,#666); display:grid; place-items:center; cursor:pointer; flex:none; padding:0; }
+.aid-ib:hover, .aid-ib:active{ background:var(--bg-hover,rgba(0,0,0,.07)); color:var(--text); }
+.aid-ib svg{ width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.aid-ib.on{ color:var(--gold); background:var(--bg-hover,rgba(0,0,0,.07)); }
+.aid-pos{ display:inline-flex; gap:1px; }
+.aid-pos[hidden]{ display:none; }
+
+.aid-menu{ position:absolute; right:6px; top:calc(100% + 2px); z-index:20; min-width:200px; padding:5px; border:1px solid var(--line); border-radius:11px; background:var(--bg); box-shadow:0 10px 30px rgba(0,0,0,.25); display:flex; flex-direction:column; }
+.aid-menu[hidden]{ display:none; }
+.aid-menu button{ display:flex; align-items:center; gap:8px; width:100%; height:38px; padding:0 11px; border:0; border-radius:7px; background:none; color:var(--text); font:inherit; font-size:13.5px; text-align:left; cursor:pointer; }
+.aid-menu button:hover{ background:var(--bg-hover,rgba(0,0,0,.07)); }
+.aid-menu hr{ border:0; border-top:1px solid var(--line); margin:4px 2px; }
+
+.aid-log{ flex:1; min-height:0; overflow:auto; padding:14px 13px; display:flex; flex-direction:column; gap:14px; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
+.aid-log .u{ align-self:flex-end; max-width:90%; background:color-mix(in srgb,var(--gold) 16%,transparent); padding:8px 13px; border-radius:16px 16px 4px 16px; line-height:1.55; white-space:pre-wrap; word-break:break-word; }
+.aid-log .a{ align-self:stretch; line-height:1.72; word-break:break-word; font-size:14.5px; }
+.aid-log .a p{ margin:0 0 .5em; }
+.aid-log .a ul{ margin:.2em 0 .6em; padding-left:1.25em; }
+.aid-log .a li{ margin:.18em 0; }
+.aid-log .a .sp{ height:.35em; }
+.aid-log .a.err{ color:#c0392b; }
+body.dark .aid-log .a.err{ color:#ff8a80; }
+.aid-log .meta{ display:flex; flex-wrap:wrap; gap:4px 10px; align-items:center; margin-top:4px; font-size:12px; color:var(--text-soft,#777); }
+.aid-log .meta button{ border:0; background:none; color:var(--text-soft,#777); font:inherit; font-size:12px; padding:2px 4px; cursor:pointer; text-decoration:underline; }
+.aid-log .w{ align-self:flex-start; color:var(--text-soft,#777); font-size:13.5px; }
+.aid-log .w::after{ content:''; display:inline-block; width:1.2em; text-align:left; animation:aidDots 1.2s steps(4,end) infinite; }
+@keyframes aidDots{ 0%{content:''} 25%{content:'.'} 50%{content:'..'} 75%{content:'...'} }
+.aid-log .hello{ margin:auto 0; text-align:center; padding:6px 4px; }
+.aid-log .hello b{ display:block; font-size:16px; margin-bottom:4px; }
+.aid-log .hello small{ display:block; color:var(--text-soft,#777); line-height:1.5; margin-bottom:12px; }
+.aid-log .chips{ display:flex; flex-wrap:wrap; gap:7px; justify-content:center; }
+.aid-chip{ border:1px solid var(--line); border-radius:999px; background:var(--bg-card,var(--bg)); color:var(--text); font:inherit; font-size:13px; padding:7px 13px; cursor:pointer; }
+.aid-chip:hover{ border-color:var(--gold); color:var(--gold); }
+.aivs{ display:inline; border:0; border-radius:10px; background:color-mix(in srgb,var(--gold) 14%,transparent); color:var(--gold); font:inherit; font-size:.9em; font-weight:700; padding:0 7px; margin:0 1px; cursor:pointer; }
+body.theme-eink .aivs{ background:#eee; color:#000; border:1px solid #000; }
+.aid-ask{ align-self:stretch; border:1px solid var(--gold); border-radius:12px; padding:10px 12px; background:color-mix(in srgb,var(--gold) 8%,transparent); }
+.aid-ask p{ margin:0 0 8px; line-height:1.55; }
+.aid-ask .row{ display:flex; gap:8px; }
+.aid-ask button{ flex:1; height:36px; border-radius:9px; border:1px solid var(--line); background:var(--bg); color:var(--text); font:inherit; font-weight:600; cursor:pointer; }
+.aid-ask button.ok{ background:var(--gold); color:#fff; border-color:var(--gold); }
+.aid-ask.done{ opacity:.65; }
+.aid-ask.done .row{ display:none; }
+
+.aid-bar{ flex:none; padding:6px 12px calc(10px + env(safe-area-inset-bottom,0px)); background:var(--bg); border-top:1px solid var(--line); }
+#ai-dock[data-side="right"] .aid-bar, #ai-dock[data-side="left"] .aid-bar{ padding-bottom:calc(10px + env(safe-area-inset-bottom,0px)); }
+.aid-chips{ display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; padding-bottom:6px; }
+.aid-chips::-webkit-scrollbar{ display:none; }
+.aid-chips .aid-chip{ white-space:nowrap; flex:none; font-size:12.5px; padding:5px 11px; }
+.aid-chips:empty{ display:none; }
+.aid-q{ display:flex; gap:8px; align-items:flex-end; }
+#aid-in{ flex:1; min-width:0; resize:none; max-height:120px; min-height:40px; padding:9px 12px; border:1px solid var(--line); border-radius:20px; background:var(--bg-card,var(--bg)); color:var(--text); font:inherit; font-size:15px; line-height:1.4; outline:none; box-sizing:border-box; }
+#aid-in:focus{ border-color:var(--gold); }
+#aid-send{ width:40px; height:40px; border-radius:50%; border:0; background:var(--gold); color:#fff; display:grid; place-items:center; cursor:pointer; flex:none; padding:0; }
+#aid-send svg{ width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+#aid-send.stop svg{ fill:currentColor; stroke:none; }
+
+/* ---- 설정(API 키) ---- */
+.aid-set{ position:absolute; inset:0; z-index:15; background:var(--bg); display:flex; flex-direction:column; }
+.aid-set[hidden]{ display:none; }
+.aid-set .body{ flex:1; overflow:auto; padding:14px 16px 20px; -webkit-overflow-scrolling:touch; }
+.aid-set h4{ margin:0 0 4px; font-size:14px; }
+.aid-set p, .aid-set small{ color:var(--text-soft,#777); line-height:1.6; font-size:12.5px; margin:0 0 10px; display:block; }
+.aid-set ol{ margin:0 0 12px; padding-left:1.3em; font-size:13px; line-height:1.7; }
+.aid-set input[type=text]{ width:100%; box-sizing:border-box; height:42px; padding:0 12px; border:1px solid var(--line); border-radius:10px; background:var(--bg-card,var(--bg)); color:var(--text); font:inherit; font-size:14px; margin-bottom:8px; }
+.aid-set .btns{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.aid-set .btns button, .aid-link{ height:38px; padding:0 15px; border-radius:10px; border:1px solid var(--line); background:var(--bg-card,var(--bg)); color:var(--text); font:inherit; font-size:13.5px; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; text-decoration:none; }
+.aid-set .btns button.pri, .aid-link{ background:var(--gold); border-color:var(--gold); color:#fff; }
+.aid-link{ margin-bottom:12px; }
+.aid-set .stat{ font-size:12.5px; padding:8px 10px; border-radius:9px; background:var(--bg-hover,rgba(0,0,0,.05)); margin-bottom:12px; line-height:1.5; }
+.aid-set .sec{ border-top:1px solid var(--line); padding-top:12px; margin-top:6px; }
+.aid-set select{ height:38px; border:1px solid var(--line); border-radius:9px; background:var(--bg-card,var(--bg)); color:var(--text); font:inherit; padding:0 8px; }
+
+@media print{ #ai-dock, #ai-fab{ display:none !important; } }
+
+/*AI-CSS-END*/
 </style>
+<!--AI-BEGIN--><script>window.NV={l:0,r:0,b:0,w:function(){return Math.max(1,innerWidth-this.l-this.r);},h:function(){return Math.max(1,innerHeight-this.b);}};</script><!--AI-END-->
 </head>
 <body>
 <div id="app">
@@ -7403,10 +7553,10 @@ function setupPageTapGesture(){
     if(tgt && tgt.closest && (tgt.closest('.immersive-modebar') || tgt.closest('button') || tgt.closest('a'))) return;
 
     const now = Date.now();
-    const x = (e.changedTouches ? e.changedTouches[0].clientX : (e.clientX!=null?e.clientX:sx));
+    const x = (e.changedTouches ? e.changedTouches[0].clientX : (e.clientX!=null?e.clientX:sx)) - NV.l;
     const y = (e.changedTouches ? e.changedTouches[0].clientY : (e.clientY!=null?e.clientY:sy));
-    const w = window.innerWidth;
-    const h = window.innerHeight;
+    const w = NV.w();
+    const h = NV.h();
     // 상단 5%는 좌우 토글(정지/재생, 스크롤/페이지)이 있는 영역 → 페이지 넘김에서 제외
     if(y <= h*0.05) return;
     const inCenter = (x >= w*0.20 && x <= w*0.80);   // 가운데 60% = 더블탭 영역
@@ -7458,7 +7608,7 @@ function pageTurn(dir){
       if(!isNaN(pb) && pb > 0) footerOffset = pb;
     }
   } catch(e){}
-  const vh = window.innerHeight;
+  const vh = NV.h();
   const scrollY = window.scrollY;
   // 각 구절의 문서상 절대 top
   const tops = blocks.map(b => b.getBoundingClientRect().top + scrollY);
@@ -7570,8 +7720,8 @@ function setupDoubleTapImmersive(){
     // 버튼·링크 등 조작 요소를 누른 경우는 무시
     if(ev.target.closest('button,a,input,nav,header,.mc-dot,.immersive-exit,.ws-page-zone,.immersive-modebar')) return;
     // 화면 가운데(가로 25~75%, 세로 25~75%)만 인정
-    const w = window.innerWidth, h = window.innerHeight;
-    const x = ev.clientX, y = ev.clientY;
+    const w = NV.w(), h = NV.h();
+    const x = ev.clientX - NV.l, y = ev.clientY;
     const inCenter = (x > w*0.25 && x < w*0.75 && y > h*0.25 && y < h*0.75);
     const now = Date.now();
     const near = Math.abs(x - _lastTapX) < 40 && Math.abs(y - _lastTapY) < 40;
@@ -7785,8 +7935,8 @@ function ttsFindVerseEl(item){
 // 고정 요소들의 하단을 모아 최댓값을 쓴다. → 레이아웃·화면비율과 무관하게 정확.
 function ttsTopInset(skipEl){
   let inset = 0;
-  const vw = window.innerWidth || document.documentElement.clientWidth;
-  const xs = [vw*0.5, vw*0.18, vw*0.82];   // 가운데 + 좌우 샘플
+  const vw = NV.w();
+  const xs = [NV.l + vw*0.5, NV.l + vw*0.18, NV.l + vw*0.82];   // 가운데 + 좌우 샘플
   // 화면 위쪽 0~200px 범위를 훑으며, 그 지점을 덮고 있는 고정 요소의 하단을 찾는다.
   for(let y = 2; y <= 200; y += 8){
     for(const x of xs){
@@ -7795,6 +7945,7 @@ function ttsTopInset(skipEl){
       if(!stack) continue;
       for(const el of stack){
         if(!el || el === document.body || el === document.documentElement) continue;
+        if(el.closest && el.closest('#ai-dock')) continue;
         if(skipEl && (el === skipEl || el.contains(skipEl) || skipEl.contains(el))) continue;
         let node = el, fixedBottom = 0, found = false;
         // el 자신 또는 조상 중에 sticky/fixed가 있으면 그 요소의 하단을 채택
@@ -13691,8 +13842,8 @@ function setupLongPress(){
     const point = ev.touches ? ev.touches[0] : ev;
     // 페이지 모드: 좌우 25%는 페이지 넘김 영역이므로 롱탭(형광펜/메모) 무시. 가운데 50%에서만 롱탭 허용.
     if(document.body.classList.contains('page-mode')){
-      const w = window.innerWidth;
-      if(point.clientX < w*0.25 || point.clientX > w*0.75) return;
+      const w = NV.w(), px = point.clientX - NV.l;
+      if(px < w*0.25 || px > w*0.75) return;
     }
     lpTarget = t;
     lpStartXY = {x: point.clientX, y: point.clientY};
@@ -15291,5 +15442,711 @@ if ('serviceWorker' in navigator && location.protocol.startsWith('http') &&
 }
 </script>
 
+<!--AI-BEGIN-->
+<script>
+/* ===== 늘성경 AI 도우미 (Gemini) =====
+   · 플로팅 버튼(드래그 이동, 일정 시간 뒤 불투명도 10%) → 눌러서 도우미 창을 연다.
+   · 창 위치: 폰(좁은 화면)은 아래, 태블릿·폴더블(넓은 화면)은 오른쪽/왼쪽 사이드바. 위치·크기 변경 가능.
+   · 창이 열리면 그만큼 본문 폭·높이를 줄이고(미디어쿼리도 줄어든 폭 기준으로 다시 계산) 본문을 맞춘다.
+   · 도구 호출(Gemini function calling)로 본문 읽기·검색·이동·통독표·메모·형광펜·설정을 도와준다.
+   · API 키는 늘뷰어·늘메모와 같은 이름으로 저장(같은 주소 github.io 이면 서로 읽어 쓴다). 기기 밖으로 나가지 않는다. */
+(function(){
+'use strict';
+if(window.__neulAI) return; window.__neulAI = true;
+
+const $ = (s, r) => (r || document).querySelector(s);
+const K = { key:'neul-gkey', nm:'nm-gkey', mdl:'neul-gmodel', hist:'neul-ai-hist', dock:'neul-ai-dock',
+            wid:'neul-ai-wid', hgt:'neul-ai-hgt', fab:'neul-ai-fab', fade:'neul-ai-fade' };
+const lsg = k => { try{ return localStorage.getItem(k); }catch(e){ return null; } };
+const lss = (k, v) => { try{ localStorage.setItem(k, v); }catch(e){} };
+const lsd = k => { try{ localStorage.removeItem(k); }catch(e){} };
+const keyOwn = () => (lsg(K.key) || '').trim();
+const keyNm  = () => (lsg(K.nm)  || '').trim();
+const apiKey = () => keyOwn() || keyNm();
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const TL = (typeof TRANS_LABEL !== 'undefined') ? TRANS_LABEL : { K:'개역개정', S:'새번역', M:'현대어' };
+
+if(!window.NV) window.NV = { l:0, r:0, b:0, w(){ return Math.max(1, innerWidth - this.l - this.r); }, h(){ return Math.max(1, innerHeight - this.b); } };
+const NV = window.NV;
+
+const AI = { open:false, busy:false, ctrl:null, h:[], st:'', ask:null, side:'right' };
+const ICON = {
+  spark:'<svg viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>',
+  close:'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  more:'<svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="12" cy="19" r="1.2"/></svg>',
+  left:'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>',
+  bottom:'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 14h18"/></svg>',
+  right:'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M15 4v16"/></svg>',
+  send:'<svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>',
+  stop:'<svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>',
+  gear:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>'
+};
+
+/* ================= 레이아웃: 도킹 위치·크기, 본문 폭 조정 ================= */
+function dockPref(){ const v = lsg(K.dock); return (v === 'left' || v === 'right' || v === 'bottom') ? v : 'auto'; }
+function dockSide(){
+  const W = innerWidth, p = dockPref();
+  if(W < 640) return 'bottom';                 // 좁은 화면(폰 외부화면)은 하단 고정
+  if(p !== 'auto') return p;
+  return W >= 700 ? 'right' : 'bottom';        // 태블릿·폴더블(펼침)은 오른쪽 사이드바
+}
+function sizeW(){ const W = innerWidth, v = +lsg(K.wid); const d = v > 0 ? v : Math.min(W * .36, 400); return clamp(d, 280, Math.max(280, Math.min(W * .6, W - 340))); }
+function sizeH(){ const H = innerHeight, v = +lsg(K.hgt); const d = v > 0 ? v : H * .46; return clamp(d, 220, H * .85); }
+
+/* 미디어쿼리(min/max-width)를 '줄어든 본문 폭' 기준으로 다시 판단한다: 규칙의 조건 문구를 폭에 맞게 바꿔치기 */
+const MQ = []; let mqReady = false;
+function mqCollect(){
+  if(mqReady) return; mqReady = true;
+  const walk = rules => { for(const r of rules){
+    if(r.type === 4){ const t = r.media.mediaText; if(/(min|max)-width/.test(t)) MQ.push({ r, o:t }); }
+    if(r.cssRules) walk(r.cssRules);
+  } };
+  for(const sh of document.styleSheets){ let rs; try{ rs = sh.cssRules; }catch(e){ continue; } if(rs) walk(rs); }
+}
+function mqApply(effW){
+  mqCollect();
+  for(const m of MQ){
+    let t = m.o;
+    if(effW != null) t = t.replace(/\(\s*(min|max)-width\s*:\s*([\d.]+)px\s*\)/g, (x, k, v) => ((k === 'min' ? effW >= +v : effW <= +v) ? '(min-width:0px)' : '(min-width:99999px)'));
+    try{ if(m.r.media.mediaText !== t) m.r.media.mediaText = t; }catch(e){}
+  }
+}
+
+let _disp = false;
+function layout(){
+  const root = document.documentElement, b = document.body, d = $('#ai-dock');
+  if(!d) return;
+  if(!AI.open){
+    d.hidden = true;
+    b.classList.remove('ai-dk', 'ai-dk-left', 'ai-dk-right', 'ai-dk-bottom');
+    ['--dk-l', '--dk-r', '--dk-b', '--dvw'].forEach(p => root.style.removeProperty(p));
+    NV.l = NV.r = NV.b = 0;
+    mqApply(null);
+  } else {
+    const side = dockSide(); AI.side = side;
+    let l = 0, r = 0, bt = 0;
+    if(side === 'bottom'){ bt = sizeH(); root.style.setProperty('--aid-h', bt + 'px'); }
+    else { const w = sizeW(); root.style.setProperty('--aid-w', w + 'px'); if(side === 'left') l = w; else r = w; }
+    d.dataset.side = side; d.hidden = false;
+    b.classList.add('ai-dk'); ['left', 'right', 'bottom'].forEach(s => b.classList.toggle('ai-dk-' + s, s === side));
+    root.style.setProperty('--dk-l', l + 'px'); root.style.setProperty('--dk-r', r + 'px'); root.style.setProperty('--dk-b', bt + 'px');
+    NV.l = l; NV.r = r; NV.b = bt;
+    const effW = Math.max(1, innerWidth - l - r);
+    root.style.setProperty('--dvw', (effW / 100) + 'px');
+    mqApply(effW);
+    const posBox = $('.aid-pos', d); if(posBox) posBox.hidden = innerWidth < 640;
+    $$('.aid-pos .aid-ib', d).forEach(x => x.classList.toggle('on', x.dataset.pos === side));
+  }
+  placeFab();
+  if(!_disp){ _disp = true; try{ window.dispatchEvent(new Event('resize')); }catch(e){} _disp = false; }
+}
+const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+
+/* ================= 플로팅 버튼 ================= */
+let fab = null, fabTimer = 0;
+const FAB = 50;
+function fadeMs(){ const v = lsg(K.fade); return v == null ? 3000 : Math.max(0, +v || 0); }
+function fabPos(){
+  let p = null; try{ p = JSON.parse(lsg(K.fab) || 'null'); }catch(e){}
+  const W = innerWidth, H = innerHeight;
+  let x = p && typeof p.x === 'number' ? p.x * W : W - FAB - 14;
+  let y = p && typeof p.y === 'number' ? p.y * H : H * .68;
+  const minX = NV.l + 6, maxX = innerWidth - NV.r - FAB - 6, minY = 6 + (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sat')) || 0), maxY = innerHeight - NV.b - FAB - 6;
+  return { x: clamp(x, minX, Math.max(minX, maxX)), y: clamp(y, minY, Math.max(minY, maxY)) };
+}
+function placeFab(){
+  if(!fab) return;
+  fab.hidden = AI.open;
+  if(AI.open) return;
+  const p = fabPos(); fab.style.transform = 'translate(' + p.x + 'px,' + p.y + 'px)';
+  fab.style.setProperty('--fx', p.x + 'px'); fab.style.setProperty('--fy', p.y + 'px');
+  fabWake();
+}
+function fabWake(){
+  if(!fab) return;
+  fab.classList.remove('idle'); clearTimeout(fabTimer);
+  const ms = fadeMs();
+  if(ms > 0 && !AI.open) fabTimer = setTimeout(() => { if(!fab.classList.contains('drag')) fab.classList.add('idle'); }, ms);
+}
+function buildFab(){
+  fab = document.createElement('button');
+  fab.id = 'ai-fab'; fab.type = 'button'; fab.setAttribute('aria-label', 'AI 도우미 열기'); fab.title = 'AI 도우미';
+  fab.innerHTML = ICON.spark;
+  document.body.appendChild(fab);
+  let sx = 0, sy = 0, ox = 0, oy = 0, drag = false, wasIdle = false, pid = null;
+  const st = e => e.stopPropagation();
+  fab.addEventListener('pointerdown', e => {
+    if(e.button != null && e.button > 0) return;
+    st(e); pid = e.pointerId; try{ fab.setPointerCapture(pid); }catch(x){}
+    wasIdle = fab.classList.contains('idle'); fabWake();
+    const p = fabPos(); ox = p.x; oy = p.y; sx = e.clientX; sy = e.clientY; drag = false;
+  });
+  fab.addEventListener('pointermove', e => {
+    if(pid == null || e.pointerId !== pid) return;
+    const dx = e.clientX - sx, dy = e.clientY - sy;
+    if(!drag && Math.hypot(dx, dy) > 7){ drag = true; fab.classList.add('drag'); fab.classList.remove('idle'); clearTimeout(fabTimer); }
+    if(drag){
+      const minX = NV.l + 4, maxX = innerWidth - NV.r - FAB - 4, minY = 4, maxY = innerHeight - NV.b - FAB - 4;
+      const x = clamp(ox + dx, minX, maxX), y = clamp(oy + dy, minY, maxY);
+      fab.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+      fab._x = x; fab._y = y;
+      e.preventDefault();
+    }
+  });
+  const end = e => {
+    if(pid == null || e.pointerId !== pid) return;
+    try{ fab.releasePointerCapture(pid); }catch(x){} pid = null;
+    fab.classList.remove('drag');
+    if(drag){ drag = false; lss(K.fab, JSON.stringify({ x: (fab._x || 0) / innerWidth, y: (fab._y || 0) / innerHeight })); fabWake(); return; }
+    if(e.type === 'pointercancel') return;
+    if(wasIdle){ fabWake(); return; }   // 흐린 상태에서 첫 탭은 깨우기만(본문 읽다가 잘못 눌러 열리는 것 방지)
+    toggle(true);
+  };
+  fab.addEventListener('pointerup', end); fab.addEventListener('pointercancel', end);
+  fab.addEventListener('pointerenter', e => { if(e.pointerType === 'mouse') fabWake(); }); fab.addEventListener('focus', fabWake);
+  ['click', 'touchstart', 'touchend', 'mousedown', 'mouseup', 'dblclick'].forEach(t => fab.addEventListener(t, st));
+  fab.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(true); } });
+  placeFab();
+}
+
+/* ================= 도우미 창 ================= */
+function buildDock(){
+  const d = document.createElement('aside');
+  d.id = 'ai-dock'; d.hidden = true; d.setAttribute('aria-label', 'AI 도우미');
+  d.innerHTML =
+    '<div class="aid-grip" aria-hidden="true"></div>' +
+    '<header class="aid-head"><b>AI 도우미<small id="aid-ctx"></small></b>' +
+      '<span class="aid-pos">' +
+        '<button type="button" class="aid-ib" data-pos="left" title="왼쪽 사이드바">' + ICON.left + '</button>' +
+        '<button type="button" class="aid-ib" data-pos="bottom" title="아래쪽">' + ICON.bottom + '</button>' +
+        '<button type="button" class="aid-ib" data-pos="right" title="오른쪽 사이드바">' + ICON.right + '</button>' +
+      '</span>' +
+      '<button type="button" class="aid-ib" id="aid-more" title="메뉴" aria-label="메뉴">' + ICON.more + '</button>' +
+      '<button type="button" class="aid-ib" id="aid-x" title="닫기" aria-label="닫기">' + ICON.close + '</button>' +
+      '<div class="aid-menu" id="aid-menu" hidden>' +
+        '<button type="button" data-m="key">' + ICON.gear.replace('<svg', '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"') + 'API 키 · 설정</button>' +
+        '<button type="button" data-m="clear">대화 지우기</button><hr>' +
+        '<button type="button" data-m="auto">창 위치 자동(폰=아래, 태블릿=오른쪽)</button>' +
+        '<button type="button" data-m="size">창 크기 처음대로</button>' +
+      '</div>' +
+    '</header>' +
+    '<div class="aid-log" id="aid-log"></div>' +
+    '<div class="aid-bar"><div class="aid-chips" id="aid-chips"></div>' +
+      '<div class="aid-q"><textarea id="aid-in" rows="1" placeholder="무엇이든 물어보세요" enterkeyhint="send"></textarea>' +
+      '<button type="button" id="aid-send" title="보내기" aria-label="보내기">' + ICON.send + '</button></div></div>' +
+    '<div class="aid-set" id="aid-set" hidden></div>';
+  document.body.appendChild(d);
+  // 창 안의 터치·클릭이 본문의 더블탭 전체보기·롱프레스·페이지 넘김으로 번지지 않게 막는다
+  ['touchstart', 'touchend', 'mousedown', 'mouseup', 'click', 'dblclick', 'contextmenu', 'keydown', 'keyup'].forEach(t => d.addEventListener(t, e => e.stopPropagation()));
+
+  $('#aid-x', d).addEventListener('click', () => toggle(false));
+  $('#aid-more', d).addEventListener('click', e => { e.stopPropagation(); const m = $('#aid-menu', d); m.hidden = !m.hidden; });
+  d.addEventListener('click', e => { if(!e.target.closest('#aid-menu') && !e.target.closest('#aid-more')) $('#aid-menu', d).hidden = true; });
+  $('#aid-menu', d).addEventListener('click', e => {
+    const b = e.target.closest('button'); if(!b) return; $('#aid-menu', d).hidden = true;
+    const m = b.dataset.m;
+    if(m === 'key') openSettings();
+    else if(m === 'clear') clearHist();
+    else if(m === 'auto'){ lsd(K.dock); layout(); }
+    else if(m === 'size'){ lsd(K.wid); lsd(K.hgt); layout(); }
+  });
+  $$('.aid-pos .aid-ib', d).forEach(b => b.addEventListener('click', () => { lss(K.dock, b.dataset.pos); layout(); }));
+
+  const inp = $('#aid-in', d);
+  const send = () => { const v = inp.value; if(AI.busy) return; inp.value = ''; inp.style.height = ''; ask(v); };
+  $('#aid-send', d).addEventListener('click', () => { if(AI.busy){ stopAsk(); return; } send(); });
+  inp.addEventListener('input', () => { inp.style.height = 'auto'; inp.style.height = Math.min(120, inp.scrollHeight) + 'px'; });
+  inp.addEventListener('keydown', e => { if(e.key === 'Enter' && !e.shiftKey && !e.isComposing && !matchMedia('(pointer:coarse)').matches){ e.preventDefault(); send(); } if(e.key === 'Escape'){ toggle(false); } });
+  $('#aid-log', d).addEventListener('click', e => {
+    const b = e.target.closest('.aivs'); if(!b) return;
+    const r = parseBibleRef(b.dataset.ref || b.textContent);
+    if(r) openPassage(r.book, r.ch, r.vs || 0);
+  });
+
+  // 크기 조절(가장자리 잡고 끌기)
+  const grip = $('.aid-grip', d); let gd = false;
+  grip.addEventListener('pointerdown', e => { gd = true; grip.classList.add('drag'); try{ grip.setPointerCapture(e.pointerId); }catch(x){} e.preventDefault(); e.stopPropagation(); });
+  grip.addEventListener('pointermove', e => {
+    if(!gd) return;
+    const s = AI.side;
+    if(s === 'right') lss(K.wid, clamp(innerWidth - e.clientX, 280, Math.max(280, Math.min(innerWidth * .6, innerWidth - 340))));
+    else if(s === 'left') lss(K.wid, clamp(e.clientX, 280, Math.max(280, Math.min(innerWidth * .6, innerWidth - 340))));
+    else lss(K.hgt, clamp(innerHeight - e.clientY, 220, innerHeight * .85));
+    if(!grip._raf) grip._raf = requestAnimationFrame(() => { grip._raf = 0; layout(); });
+  });
+  const ge = () => { gd = false; grip.classList.remove('drag'); };
+  grip.addEventListener('pointerup', ge); grip.addEventListener('pointercancel', ge);
+  return d;
+}
+
+function toggle(on){
+  AI.open = on == null ? !AI.open : !!on;
+  if(AI.open){ loadHist(); }
+  layout();
+  if(AI.open){
+    render(); updateChips();
+    setTimeout(() => { const l = $('#aid-log'); if(l) l.scrollTop = l.scrollHeight; }, 30);
+    if(!matchMedia('(pointer:coarse)').matches) { const i = $('#aid-in'); if(i) i.focus(); }
+    if(!apiKey()) setTimeout(() => { if(AI.open && !AI.h.length) openSettings(true); }, 250);
+  } else { closeSettings(); fabWake(); }
+}
+
+/* ================= 대화 기록 ================= */
+let _loaded = false;
+function loadHist(){ if(_loaded) return; _loaded = true; try{ const a = JSON.parse(lsg(K.hist) || '[]'); AI.h = Array.isArray(a) ? a.filter(m => m && (m.r === 'u' || m.r === 'a') && typeof m.t === 'string') : []; }catch(e){ AI.h = []; } }
+function saveHist(){ try{ lss(K.hist, JSON.stringify(AI.h.filter(m => !m.err).slice(-40))); }catch(e){} }
+function clearHist(){ if(AI.busy) return; if(!AI.h.length) return; if(!confirm('AI 도우미 대화를 모두 지울까요?')) return; AI.h = []; saveHist(); render(); }
+
+/* ================= 화면 상태·본문 도구 ================= */
+function findBk(n){ return (typeof findBook === 'function') ? findBook(n) : (bible.B.find(b => b[0] === n) || null); }
+function bkName(n){ const b = findBk(n); return b ? b[2] : ('#' + n); }
+function bkAbbr(n){ const b = findBk(n); return b ? b[1] : ('#' + n); }
+function resolveBook(x){
+  if(x == null || x === '') return null;
+  const s0 = String(x).trim();
+  if(/^\d+$/.test(s0)) return findBk(+s0);
+  const s = s0.replace(/\s+/g, '');
+  const al = _bibleAliases();
+  if(al.map[s] != null) return findBk(al.map[s]);
+  for(const b of bible.B){ if(b[2].replace(/\s+/g, '') === s) return b; }
+  if(s.length >= 2){ for(const n of al.names){ if(n.length >= 2 && (n.startsWith(s) || s.startsWith(n))) return findBk(al.map[n]); } }
+  return null;
+}
+function chVerses(b, c){
+  const k = (bible.K[b] || {})[c] || [], m = (bible.M[b] || {})[c] || [], s = ((bible.S && bible.S[b]) || {})[c] || [];
+  return Math.max(k.length - 1, m.length - 1, s.length - 1, 0);
+}
+function transList(t){
+  t = String(t || '').toUpperCase();
+  if(t === 'ALL') return ['K', 'S', 'M'];
+  if(t === 'K' || t === 'M' || t === 'S') return [t];
+  const a = [col1Trans]; if(col2Trans && col2Trans !== 'none' && col2Trans !== col1Trans) a.push(col2Trans); return a;
+}
+const VK = { K:'kjv', M:'modern', S:'std' };
+function passage(bk, c1, c2, vf, vt, trs, maxChars){
+  const out = []; let used = 0, cut = false;
+  for(let c = c1; c <= c2; c++){
+    const nv = chVerses(bk[0], c); if(!nv) continue;
+    const a = vf && c === c1 ? vf : 1, z = vt && c === c2 ? Math.min(vt, nv) : nv;
+    out.push('## ' + bk[2] + ' ' + c + (bk[0] === 19 ? '편' : '장') + (a > 1 || z < nv ? ' (' + a + '~' + z + '절)' : ''));
+    for(let v = a; v <= z; v++){
+      const t = getVerseText(bk[0], c, v);
+      const line = trs.length === 1 ? (v + ' ' + (t[VK[trs[0]]] || '')) : (v + ' ' + trs.map(x => TL[x] + ': ' + (t[VK[x]] || '')).join(' | '));
+      used += line.length; if(used > maxChars){ cut = true; break; } out.push(line);
+    }
+    if(cut) break;
+  }
+  return out.join('\n') + (cut ? '\n(분량 제한으로 여기까지만 보냈습니다. 이어서 필요하면 절 범위를 나누어 다시 요청하세요)' : '');
+}
+function viewLabel(){
+  const s = state || {};
+  const names = { home:'처음 화면', books:'성경 전체 목록', search:'말씀 검색', bookmarks:'형광펜·북마크 목록', plan:'통독 계획 목록', neulsarang:'늘사랑 100일 통독표', mccheyne:'맥체인 통독표', chrono:'연대기 통독표', hymn:'찬송가 목록', worship:'경배찬양', prayer:'기도문', antiphon:'교독문' };
+  if(s.view === 'reading'){
+    let l = '성경 본문 ' + bkName(s.book) + ' ' + s.ch + (s.book === 19 ? '편' : '장');
+    if(s.mc) l += ' (맥체인 ' + s.mc.month + '월 ' + s.mc.day + '일 읽기)';
+    if(s.ns) l += ' (늘사랑 100일 통독 ' + s.ns.day + '일차)';
+    if(s.cr) l += ' (연대기 통독 ' + s.cr.day + '일차)';
+    return l;
+  }
+  if(s.view === 'chapters') return bkName(s.book) + ' 장 목록';
+  if(s.view === 'mccheyne-day') return '맥체인 ' + s.month + '월 ' + s.day + '일';
+  if(s.view === 'neulsarang-day') return '늘사랑 100일 통독 ' + s.nsDay + '일차';
+  if(s.view === 'hymn-view') return '찬송가 ' + s.num + '장';
+  return names[s.view] || (s.view || '');
+}
+function ctxText(){
+  const s = state || {}, L = [];
+  L.push('[오늘] ' + new Date().toLocaleDateString('ko-KR', { year:'numeric', month:'long', day:'numeric', weekday:'long' }));
+  L.push('[지금 화면] ' + viewLabel());
+  L.push('[본문 역본 설정] 1열 ' + TL[col1Trans] + (col2Trans && col2Trans !== 'none' ? ', 2열 ' + TL[col2Trans] : ''));
+  try{ if(typeof selSet !== 'undefined' && selSet && selSet.size){ const a = Array.from(selSet).slice(0, 30).map(k => { const p = k.split(':'); return bkAbbr(+p[0]) + ' ' + p[1] + ':' + p[2]; }); L.push('[사용자가 선택한 구절] ' + a.join(', ')); } }catch(e){}
+  if(s.view === 'reading' && s.book && s.ch){
+    const bk = findBk(s.book);
+    if(bk){ const trs = transList(''); L.push('[지금 장 본문 · ' + trs.map(x => TL[x]).join('/') + ']\n' + passage(bk, s.ch, s.ch, 0, 0, trs, 9000)); }
+  }
+  return L.join('\n');
+}
+
+function openPassage(book, ch, vs){
+  try{
+    const same = state && state.view === 'reading' && state.book === book && state.ch === ch && !state.mc && !state.ns && !state.cr;
+    if(!same) setView({ view:'reading', book, ch });
+    if(vs){
+      setTimeout(() => {
+        const el = document.querySelector('.verse-block[data-book="' + book + '"][data-ch="' + ch + '"][data-vs="' + vs + '"]');
+        if(!el) return;
+        const r = el.getBoundingClientRect(), vh = NV.h();
+        window.scrollTo({ top: Math.max(0, window.scrollY + r.top - vh * .3), behavior:'smooth' });
+        el.classList.remove('page-flash'); void el.offsetWidth; el.classList.add('page-flash');
+      }, same ? 20 : 350);
+    }
+  }catch(e){ console.error('[AI] openPassage', e); }
+}
+
+const planInfo = {
+  mccheyne(a){
+    const now = new Date(); const m = +a.month || (now.getMonth() + 1), d = +a.day || now.getDate();
+    const e = bible.C.find(x => x[0] === m && x[1] === d); if(!e) return { error:'해당 날짜의 맥체인 읽기가 없습니다' };
+    return { plan:'맥체인', month:m, day:d, readings:e[2].map((p, i) => ({ slot:i + 1, book:bkName(p[0]), chapter:p[1], label:p[2] || (bkName(p[0]) + ' ' + p[1] + '장') })), nav:{ month:m, day:d } };
+  },
+  neulsarang(a){
+    let d = +a.day;
+    if(!d){ d = 1; for(const x of NEULSARANG_100){ if(!nsDayDone(x[0])){ d = x[0]; break; } d = x[0]; } }
+    const e = NEULSARANG_100.find(x => x[0] === d); if(!e) return { error:'해당 일차가 없습니다(1~100)' };
+    const chs = nsParseRange(e[1]);
+    return { plan:'늘사랑 100일 통독', day:d, range:e[1], done:nsDayDone(d), chapters:chs.map(c => bkName(c.book) + ' ' + c.ch + '장'), nav:{ day:d } };
+  },
+  chrono(a){
+    const d = +a.day || crTodayDay(); const e = crFind(d); if(!e) return { error:'해당 일차가 없습니다' };
+    const refs = []; const pushRef = r => refs.push(crBookName(r[0]) + ' ' + crRefLabel(r));
+    (e.refs || []).forEach(pushRef);
+    const events = (e.events || []).map(ev => ({ title:ev.title || ev.t || '', refs:(ev.rows || []).flatMap(row => (row.refs || []).map(r => crBookName(r[0]) + ' ' + crRefLabel(r))) }));
+    return { plan:'연대기 통독', day:d, refs, events:events.slice(0, 12), nav:{ day:d } };
+  }
+};
+
+/* ---- 도구 정의 (Gemini function calling) ---- */
+const BOOK_DESC = '성경책 이름(예: 창세기, 요한복음, 시편, 요, 롬)';
+const TOOLS = [{ functionDeclarations:[
+  { name:'get_passage', description:'성경 본문을 가져옵니다. 성경 구절을 인용하거나 설명하기 전에 반드시 이 도구로 본문을 확인하세요(기억으로 인용 금지). 한 번에 최대 5장.',
+    parameters:{ type:'OBJECT', properties:{ book:{ type:'STRING', description:BOOK_DESC }, chapter:{ type:'INTEGER', description:'시작 장' }, chapter_to:{ type:'INTEGER', description:'끝 장(생략하면 시작 장만)' }, verse_from:{ type:'INTEGER', description:'시작 절(생략하면 장 처음부터)' }, verse_to:{ type:'INTEGER', description:'끝 절(생략하면 장 끝까지)' }, translation:{ type:'STRING', enum:['K', 'S', 'M', 'ALL'], description:'K 개역개정, S 새번역, M 현대어, ALL 세 역본 비교. 생략하면 사용자가 화면에 설정한 역본' } }, required:['book', 'chapter'] } },
+  { name:'search_bible', description:'성경 전체에서 낱말·구절이 들어간 절을 찾습니다(글자가 그대로 일치하는 것만, 띄어쓰기로 구분한 낱말은 모두 포함된 절). 최대 30개.',
+    parameters:{ type:'OBJECT', properties:{ query:{ type:'STRING', description:'찾을 낱말(여러 개는 띄어쓰기)' }, translation:{ type:'STRING', enum:['K', 'S', 'M', 'ALL'], description:'검색할 역본(생략하면 ALL)' }, limit:{ type:'INTEGER', description:'최대 개수(기본 15, 최대 30)' } }, required:['query'] } },
+  { name:'open_passage', description:'앱 화면을 지정한 성경 본문으로 이동합니다(사용자가 "열어줘/이동해줘/보여줘"라고 할 때).',
+    parameters:{ type:'OBJECT', properties:{ book:{ type:'STRING', description:BOOK_DESC }, chapter:{ type:'INTEGER' }, verse:{ type:'INTEGER', description:'특별히 보여 줄 절(선택)' } }, required:['book', 'chapter'] } },
+  { name:'open_screen', description:'앱의 다른 화면으로 이동합니다.',
+    parameters:{ type:'OBJECT', properties:{ screen:{ type:'STRING', enum:['home', 'books', 'search', 'bookmarks', 'plan', 'neulsarang', 'mccheyne', 'chrono', 'hymn', 'prayer', 'antiphon', 'worship'], description:'home 처음, books 성경 목록, search 말씀 검색, bookmarks 형광펜 목록, plan 통독 계획, neulsarang 100일 통독표, mccheyne 맥체인표, chrono 연대기표, hymn 찬송가, prayer 기도문, antiphon 교독문, worship 경배찬양' } }, required:['screen'] } },
+  { name:'get_plan_day', description:'통독 계획(맥체인·늘사랑 100일·연대기)의 특정 날 읽을 본문을 알려 줍니다. 날짜를 생략하면 맥체인은 오늘, 늘사랑은 아직 못 마친 첫 일차, 연대기는 오늘 일차입니다. open이 true면 그 날 읽기 화면으로도 이동합니다.',
+    parameters:{ type:'OBJECT', properties:{ plan:{ type:'STRING', enum:['mccheyne', 'neulsarang', 'chrono'] }, month:{ type:'INTEGER', description:'맥체인: 월' }, day:{ type:'INTEGER', description:'맥체인: 일 / 늘사랑·연대기: 일차' }, open:{ type:'BOOLEAN' } }, required:['plan'] } },
+  { name:'get_my_data', description:'사용자가 앱에 저장한 기록을 읽습니다(읽기 전용).',
+    parameters:{ type:'OBJECT', properties:{ kind:{ type:'STRING', enum:['notes', 'highlights', 'recent', 'progress'], description:'notes 구절 메모, highlights 형광펜 구절, recent 최근 읽은 곳, progress 통독 진행 요약' }, limit:{ type:'INTEGER', description:'최대 개수(기본 15, 최대 40)' } }, required:['kind'] } },
+  { name:'add_note', description:'구절에 메모를 저장합니다. 사용자가 메모로 남겨 달라고 분명히 요청했을 때만 사용하세요(저장 전에 사용자 확인을 받습니다). 같은 구절에 이미 메모가 있으면 덮어씁니다.',
+    parameters:{ type:'OBJECT', properties:{ book:{ type:'STRING', description:BOOK_DESC }, chapter:{ type:'INTEGER' }, verse_from:{ type:'INTEGER' }, verse_to:{ type:'INTEGER', description:'생략하면 한 절' }, text:{ type:'STRING', description:'메모 내용' } }, required:['book', 'chapter', 'verse_from', 'text'] } },
+  { name:'set_highlight', description:'구절에 형광펜을 켜거나 끕니다. 사용자가 요청했을 때만 사용(저장 전에 사용자 확인을 받습니다).',
+    parameters:{ type:'OBJECT', properties:{ book:{ type:'STRING', description:BOOK_DESC }, chapter:{ type:'INTEGER' }, verse_from:{ type:'INTEGER' }, verse_to:{ type:'INTEGER', description:'생략하면 한 절' }, on:{ type:'BOOLEAN', description:'true 켜기, false 끄기' } }, required:['book', 'chapter', 'verse_from', 'on'] } },
+  { name:'mark_chapter_read', description:'성경 한 장을 "읽음"으로 표시합니다. 사용자가 요청했을 때만 사용(사용자 확인을 받습니다).',
+    parameters:{ type:'OBJECT', properties:{ book:{ type:'STRING', description:BOOK_DESC }, chapter:{ type:'INTEGER' } }, required:['book', 'chapter'] } },
+  { name:'set_setting', description:'앱의 보기 설정을 바꿉니다.',
+    parameters:{ type:'OBJECT', properties:{ name:{ type:'STRING', enum:['font_size', 'theme', 'translation_1', 'translation_2', 'immersive', 'read_aloud'], description:'font_size 글자 크기(1~10, 또는 +1/-1), theme 테마(light 기본·snow 흰청·eink 흑백·paper 종이·navy 네이비·dark 다크·eyecare 눈보호), translation_1 첫째 역본(K/S/M), translation_2 둘째 역본(K/S/M/none), immersive 전체보기(on/off), read_aloud 음성 읽기(start/stop)' }, value:{ type:'STRING' } }, required:['name', 'value'] } }
+] }];
+
+const WRITE_TOOLS = { add_note:1, set_highlight:1, mark_chapter_read:1 };
+
+function vrange(a){ const vf = Math.max(1, +a.verse_from || 1); const vt = +a.verse_to > vf ? +a.verse_to : vf; return [vf, vt]; }
+function confirmUi(text){
+  return new Promise(res => { AI.ask = { text, res }; render(); });
+}
+
+async function runTool(name, a, log){
+  a = a || {};
+  const needBk = () => { const b = resolveBook(a.book); if(!b) throw new Error('책 이름을 알아보지 못했습니다: ' + a.book); return b; };
+  if(name === 'get_passage'){
+    const bk = needBk(); const c1 = clamp(+a.chapter || 1, 1, bk[3]); let c2 = clamp(+a.chapter_to || c1, c1, bk[3]); if(c2 - c1 > 4) c2 = c1 + 4;
+    const trs = transList(a.translation);
+    log.push(bk[1] + ' ' + c1 + (c2 > c1 ? '~' + c2 : '') + (a.verse_from ? ':' + a.verse_from + (a.verse_to ? '-' + a.verse_to : '') : ''));
+    return passage(bk, c1, c2, +a.verse_from || 0, +a.verse_to || 0, trs, 40000);
+  }
+  if(name === 'search_bible'){
+    const q = String(a.query || '').trim(); if(!q) return '검색어가 없습니다';
+    const t = String(a.translation || 'ALL').toUpperCase(); const scope = t === 'K' ? 'kjv' : t === 'M' ? 'modern' : t === 'S' ? 'std' : 'all';
+    const lim = clamp(+a.limit || 15, 1, 30);
+    const rs = doSearch(q, 400, scope); log.push('검색 “' + q.slice(0, 16) + '”');
+    if(!rs.length) return '찾지 못했습니다(글자가 그대로 일치하는 것만 찾습니다. 다른 표현으로 다시 검색해 보세요)';
+    const full = rs.filter(r => !r.partial);
+    const pick = (full.length ? full : rs).slice(0, lim);
+    return '총 ' + rs.length + '절 중 ' + pick.length + '절\n' + pick.map(r => bkAbbr(r.book) + ' ' + r.ch + ':' + r.vs + ' ' + (r.kHit ? '[개역개정] ' + r.ktext : r.sHit ? '[새번역] ' + r.stext : r.mHit ? '[현대어] ' + r.mtext : (r.ktext || r.stext || r.mtext))).join('\n');
+  }
+  if(name === 'open_passage'){
+    const bk = needBk(); const c = clamp(+a.chapter || 1, 1, bk[3]);
+    openPassage(bk[0], c, +a.verse || 0); log.push('이동 ' + bk[1] + ' ' + c); return bk[2] + ' ' + c + (bk[0] === 19 ? '편' : '장') + '으로 이동했습니다';
+  }
+  if(name === 'open_screen'){
+    const ok = ['home', 'books', 'search', 'bookmarks', 'plan', 'neulsarang', 'mccheyne', 'chrono', 'hymn', 'prayer', 'antiphon', 'worship'];
+    if(!ok.includes(a.screen)) return '알 수 없는 화면입니다'; setView({ view:a.screen }); log.push('화면 이동'); return '이동했습니다: ' + a.screen;
+  }
+  if(name === 'get_plan_day'){
+    const f = planInfo[a.plan]; if(!f) return '알 수 없는 계획입니다';
+    const r = f(a); if(r.error) return r.error;
+    if(a.open && r.nav){
+      if(a.plan === 'mccheyne') setView({ view:'reading', mc:{ month:r.nav.month, day:r.nav.day } });
+      else if(a.plan === 'neulsarang') setView({ view:'reading', ns:{ day:r.nav.day } });
+      else setView({ view:'reading', cr:{ day:r.nav.day } });
+    }
+    delete r.nav; log.push(r.plan + (r.day ? ' ' + r.day + '일' : '')); return JSON.stringify(r);
+  }
+  if(name === 'get_my_data'){
+    const lim = clamp(+a.limit || 15, 1, 40);
+    if(a.kind === 'notes'){
+      const all = getAllNotes(); const list = Object.keys(all).map(k => ({ k, o:all[k] })).filter(x => x.o && x.o.text).sort((p, q) => (q.o.time || 0) - (p.o.time || 0)).slice(0, lim);
+      log.push('내 메모'); return list.length ? list.map(x => { const p = x.k.split(':'); return bkAbbr(+p[0]) + ' ' + p[1] + ':' + (x.o.vsStart ? x.o.vsStart + '-' : '') + p[2] + ' · ' + String(x.o.text).slice(0, 300); }).join('\n') : '저장된 메모가 없습니다';
+    }
+    if(a.kind === 'highlights'){
+      const list = getBookmarks().slice(0, lim); log.push('형광펜');
+      return list.length ? list.map(b => bkAbbr(b.book) + ' ' + b.ch + ':' + b.vs + ' ' + String(getVerseText(b.book, b.ch, b.vs).kjv || '').slice(0, 120)).join('\n') : '형광펜 표시한 구절이 없습니다';
+    }
+    if(a.kind === 'recent'){ const list = getRecentSorted().slice(0, lim); log.push('최근 읽음'); return list.length ? list.map(r => r.type === 'hymn' ? '찬송가 ' + r.num + '장' : (bkName(r.book) + ' ' + r.ch + '장')).join('\n') : '기록이 없습니다'; }
+    if(a.kind === 'progress'){
+      let mcDone = 0; try{ for(const e of bible.C){ if(mcDayComplete(e[0], e[1])) mcDone++; } }catch(e){}
+      let crDone = 0; try{ crDone = Object.keys(getCrDone() || {}).length; }catch(e){}
+      log.push('통독 진행');
+      return JSON.stringify({ 읽음표시한_장수:Object.keys(getReadMap()).length, 늘사랑100일_완료일수:nsCompletedDays(), 맥체인_완료일수:mcDone, 연대기_완료일수:crDone });
+    }
+    return '알 수 없는 종류입니다';
+  }
+  if(name === 'add_note'){
+    const bk = needBk(); const c = clamp(+a.chapter || 1, 1, bk[3]); const [vf, vt] = vrange(a); const text = String(a.text || '').trim();
+    if(!text) return '메모 내용이 없습니다';
+    const ref = bk[2] + ' ' + c + ':' + vf + (vt > vf ? '-' + vt : '');
+    const ex = getNote(bk[0], c, vt);
+    const ok = await confirmUi(ref + '에 메모를 저장할까요?' + (ex ? ' (기존 메모를 덮어씁니다)' : '') + '\n\n“' + text.slice(0, 200) + (text.length > 200 ? '…' : '') + '”');
+    if(!ok) return '사용자가 저장을 거절했습니다';
+    setNote(bk[0], c, vt, text, { vsStart:vf, vsEnd:vt }); try{ if(state.view === 'reading') render(); }catch(e){}
+    log.push('메모 저장'); return ref + ' 메모를 저장했습니다';
+  }
+  if(name === 'set_highlight'){
+    const bk = needBk(); const c = clamp(+a.chapter || 1, 1, bk[3]); const [vf, vt] = vrange(a); const on = a.on !== false;
+    const ref = bk[2] + ' ' + c + ':' + vf + (vt > vf ? '-' + vt : '');
+    const ok = await confirmUi(ref + '에 형광펜을 ' + (on ? '표시' : '해제') + '할까요?'); if(!ok) return '사용자가 거절했습니다';
+    for(let v = vf; v <= vt; v++){ if(isBookmarked(bk[0], c, v) !== on) toggleBookmark(bk[0], c, v); }
+    try{ if(state.view === 'reading') render(); }catch(e){} log.push('형광펜'); return ref + ' 형광펜 ' + (on ? '표시' : '해제') + ' 완료';
+  }
+  if(name === 'mark_chapter_read'){
+    const bk = needBk(); const c = clamp(+a.chapter || 1, 1, bk[3]);
+    const ok = await confirmUi(bk[2] + ' ' + c + (bk[0] === 19 ? '편' : '장') + '을 읽음으로 표시할까요?'); if(!ok) return '사용자가 거절했습니다';
+    markChapterRead(bk[0], c); log.push('읽음 표시'); return '읽음으로 표시했습니다';
+  }
+  if(name === 'set_setting'){
+    const v = String(a.value == null ? '' : a.value).trim();
+    if(a.name === 'font_size'){
+      const cur = getFontIdx(fontGroup()); let t = /^[+-]\d+$/.test(v) ? cur + parseInt(v, 10) : parseInt(v, 10);
+      if(isNaN(t)) return '숫자(1~10) 또는 +1/-1로 지정하세요'; t = clamp(t, 1, 10); changeFont(t - cur); log.push('글자 크기'); return '글자 크기를 ' + t + '단계로 바꿨습니다';
+    }
+    if(a.name === 'theme'){ if(!THEME_LIST.some(t => t.id === v)) return '알 수 없는 테마입니다'; setTheme(v); log.push('테마'); return '테마를 ' + v + '로 바꿨습니다'; }
+    if(a.name === 'translation_1'){ if(!['K', 'S', 'M'].includes(v)) return 'K/S/M 중 하나여야 합니다'; setCol1Trans(v); log.push('역본'); return '첫째 역본을 ' + TL[v] + '으로 바꿨습니다'; }
+    if(a.name === 'translation_2'){ if(!['K', 'S', 'M', 'none'].includes(v)) return 'K/S/M/none 중 하나여야 합니다'; setCol2Trans(v); log.push('역본'); return '둘째 역본을 ' + (v === 'none' ? '없음' : TL[v]) + '으로 바꿨습니다'; }
+    if(a.name === 'immersive'){
+      const want = v === 'on'; const is = document.body.classList.contains('immersive');
+      if(want === is) return '이미 ' + (is ? '전체보기' : '일반 보기') + '입니다'; toggleImmersive(); log.push('전체보기'); return want ? '전체보기로 바꿨습니다(성경 본문 화면에서만 동작)' : '전체보기를 끝냈습니다';
+    }
+    if(a.name === 'read_aloud'){
+      if(v === 'start'){ if(state.view !== 'reading') return '성경 본문 화면에서만 읽을 수 있습니다'; if(!(ttsState.playing && !ttsState.paused)) ttsStart(); log.push('음성 읽기'); return '읽기를 시작했습니다'; }
+      if(v === 'stop'){ ttsStop(); log.push('음성 읽기'); return '읽기를 멈췄습니다'; }
+      return 'start 또는 stop 이어야 합니다';
+    }
+    return '알 수 없는 설정입니다';
+  }
+  return '알 수 없는 도구입니다';
+}
+
+/* ================= Gemini 호출 ================= */
+const GMODELS = ['gemini-3.1-flash-lite', 'gemini-3.5-flash-lite', 'gemini-3.6-flash', 'gemini-3.8-flash', 'gemini-2.5-flash'];
+async function gGen(key, body, sig){
+  const saved = lsg(K.mdl) || lsg('nm-gmodel'); const list = saved ? [saved, ...GMODELS.filter(m => m !== saved)] : GMODELS; let res = null;
+  for(const m of list){
+    if(sig && sig.aborted) throw new DOMException('abort', 'AbortError');
+    const js = JSON.stringify(body), ac = new AbortController(), tm = setTimeout(() => ac.abort(), 60000);
+    const onAb = () => ac.abort(); if(sig) sig.addEventListener('abort', onAb, { once:true });
+    try{ res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + m + ':generateContent', { method:'POST', signal:ac.signal, headers:{ 'Content-Type':'application/json', 'x-goog-api-key':key }, body:js }); }
+    finally{ clearTimeout(tm); if(sig) sig.removeEventListener('abort', onAb); }
+    if(res.status === 404 || res.status === 429) continue;
+    if(res.ok) lss(K.mdl, m);
+    return res;
+  }
+  return res;
+}
+
+const SYS =
+  '당신은 "늘성경" 앱(개역개정·새번역·현대어 대조 성경 앱) 안에 들어 있는 AI 도우미입니다. 한국어로 답하고, 성경 읽기·묵상·공부·설교 준비를 돕습니다. ' +
+  '사용자는 목회자일 수도, 일반 성도일 수도 있습니다. 어려운 신학 용어는 풀어서 설명하세요.\n' +
+  '규칙:\n' +
+  '- 성경 본문을 인용하거나 내용을 설명하기 전에 get_passage 또는 search_bible로 본문을 확인하세요. 기억으로 본문을 적지 마세요. 인용한 본문은 어느 역본인지 밝히세요.\n' +
+  '- 구절은 "요 3:16", "시편 23편", "롬 8:28-30"처럼 적으세요(앱에서 눌러 이동할 수 있게 됩니다).\n' +
+  '- 원어(히브리어·헬라어)·역사·지리·주석 내용은 널리 인정된 것만 말하고, 확실하지 않으면 "확실하지 않다"고 밝히세요. 지어내지 마세요.\n' +
+  '- 교단·교리마다 입장이 갈리는 주제는 주요 입장을 공정하게 소개하고, 사용자의 교단을 가정하지 마세요.\n' +
+  '- 설교·묵상·기도문 초안은 도움 자료입니다. 본문에 근거해 쓰고, 본문에 없는 내용을 본문이 말한다고 하지 마세요.\n' +
+  '- 앱을 직접 조작하는 일(이동, 통독표 확인, 설정 변경, 메모·형광펜 저장)은 도구로 수행하세요. 메모·형광펜·읽음 표시는 사용자가 분명히 요청했을 때만 하세요(저장 전에 사용자 확인을 받습니다).\n' +
+  '- 도구로 할 수 없는 일은 할 수 없다고 솔직히 말하세요.\n' +
+  '- 불필요한 인사말은 생략하고 간결하게, 목록은 "- "로 쓰세요.';
+
+/* ---- 마크다운 비슷한 서식 + 성경 구절 버튼 ---- */
+function fmt(t){
+  const esc = x => x.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const verse = x => x.replace(/([1-3]?[가-힣]{1,6}[1-3]?[가-힣]?)\s?(\d{1,3})\s?(?:장|편|:)\s?(?:(\d{1,3})(?:\s?절)?)?(?:\s?[-~–]\s?(\d{1,3})(?:\s?절)?)?/g, (m, bn) => {
+    let r = null; try{ r = parseBibleRef(m.trim()); }catch(e){}
+    if(!r) return m;
+    return '<button type="button" class="aivs" data-ref="' + m.trim().replace(/"/g, '') + '">' + m.trim() + '</button>';
+  });
+  const inl = x => verse(x.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>'));
+  let h = '', ul = false;
+  for(let L of esc(String(t || '')).split('\n')){
+    L = L.replace(/^\s*#{1,4}\s*/, '');
+    const m = /^\s*(?:[-*•]|\d+[.)])\s+(.*)$/.exec(L);
+    if(m){ if(!ul){ h += '<ul>'; ul = true; } h += '<li>' + inl(m[1]) + '</li>'; }
+    else { if(ul){ h += '</ul>'; ul = false; } h += L.trim() ? '<p>' + inl(L) + '</p>' : '<div class="sp"></div>'; }
+  }
+  return h + (ul ? '</ul>' : '');
+}
+
+/* ================= 화면 그리기 ================= */
+function chipsFor(){
+  const s = state || {};
+  if(s.view === 'reading' || s.view === 'mccheyne-day' || s.view === 'neulsarang-day') return [
+    ['이 장 요약', '지금 보고 있는 본문을 요약해 주세요.'], ['핵심 메시지·적용', '지금 본문의 핵심 메시지와 오늘 삶에 적용할 점을 알려 주세요.'],
+    ['역본 비교', '지금 본문에서 역본마다 표현이 다른 부분을 비교해서 설명해 주세요.'], ['관련 구절', '지금 본문과 연결되는 다른 성경 구절을 찾아 주세요.'], ['묵상 질문', '지금 본문으로 묵상 질문 3개를 만들어 주세요.']];
+  return [['오늘 맥체인 읽기', '오늘 맥체인 통독 본문이 뭐야?'], ['말씀 찾기', '"두려워 말라"가 들어간 구절을 찾아 주세요.'], ['이 앱으로 뭘 할 수 있어?', '이 AI 도우미로 늘성경에서 어떤 일들을 할 수 있는지 알려 주세요.']];
+}
+function updateChips(){
+  const box = $('#aid-chips'); if(!box) return; box.replaceChildren();
+  for(const c of chipsFor()){ const b = document.createElement('button'); b.type = 'button'; b.className = 'aid-chip'; b.textContent = c[0]; b.addEventListener('click', () => ask(c[1])); box.appendChild(b); }
+  const cx = $('#aid-ctx'); if(cx){ const l = viewLabel(); cx.textContent = l ? '· ' + l.replace(/ \(.*\)$/, '') : ''; }
+}
+function render(){
+  const box = $('#aid-log'); if(!box) return; box.replaceChildren();
+  if(!AI.h.length && !AI.busy){
+    const d = document.createElement('div'); d.className = 'hello';
+    d.innerHTML = '<b>무엇을 도와드릴까요?</b><small>본문 설명·요약·역본 비교·말씀 찾기·통독표 확인·메모와 형광펜·글자 크기와 테마 바꾸기까지 말로 시키세요.</small>';
+    const cs = document.createElement('div'); cs.className = 'chips';
+    for(const c of chipsFor()){ const b = document.createElement('button'); b.type = 'button'; b.className = 'aid-chip'; b.textContent = c[0]; b.addEventListener('click', () => ask(c[1])); cs.appendChild(b); }
+    d.appendChild(cs); box.appendChild(d);
+  }
+  for(const m of AI.h){
+    if(m.r === 'u'){ const u = document.createElement('div'); u.className = 'u'; u.textContent = m.t; box.appendChild(u); continue; }
+    const a = document.createElement('div'); a.className = 'a' + (m.err ? ' err' : ''); a.innerHTML = fmt(m.t);
+    if(!m.err){
+      const mt = document.createElement('div'); mt.className = 'meta'; if(m.m) mt.append(m.m);
+      const cp = document.createElement('button'); cp.type = 'button'; cp.textContent = '복사';
+      cp.addEventListener('click', () => { try{ navigator.clipboard.writeText(m.t).then(() => { cp.textContent = '복사됨'; setTimeout(() => cp.textContent = '복사', 1200); }); }catch(e){} });
+      mt.appendChild(cp); a.appendChild(mt);
+    }
+    box.appendChild(a);
+  }
+  if(AI.ask){
+    const k = document.createElement('div'); k.className = 'aid-ask'; const p = document.createElement('p'); p.style.whiteSpace = 'pre-wrap'; p.textContent = AI.ask.text;
+    const row = document.createElement('div'); row.className = 'row';
+    const no = document.createElement('button'); no.type = 'button'; no.textContent = '취소'; const ok = document.createElement('button'); ok.type = 'button'; ok.className = 'ok'; ok.textContent = '허용';
+    const fin = v => { const r = AI.ask.res; AI.ask = null; render(); r(v); };
+    no.addEventListener('click', () => fin(false)); ok.addEventListener('click', () => fin(true));
+    row.append(no, ok); k.append(p, row); box.appendChild(k);
+  }
+  if(AI.busy && !AI.ask){ const w = document.createElement('div'); w.className = 'w'; w.textContent = AI.st || '생각하는 중'; box.appendChild(w); }
+  box.scrollTop = box.scrollHeight;
+  const sb = $('#aid-send'); if(sb){ sb.classList.toggle('stop', AI.busy); sb.innerHTML = AI.busy ? ICON.stop : ICON.send; sb.title = AI.busy ? '멈추기' : '보내기'; }
+}
+
+function stopAsk(){ if(AI.ctrl) AI.ctrl.abort(); if(AI.ask){ const r = AI.ask.res; AI.ask = null; r(false); } }
+
+async function ask(q){
+  q = (q || '').trim(); if(!q || AI.busy) return;
+  loadHist();
+  if(!apiKey()){ AI.h.push({ r:'a', t:'Gemini API 키가 필요합니다. 오른쪽 위 ⋯ 메뉴 → “API 키 · 설정”에서 키를 넣어 주세요.', err:1 }); render(); openSettings(true); return; }
+  const turns = [];
+  for(const m of AI.h.filter(m => !m.err).slice(-12)){ const role = m.r === 'u' ? 'user' : 'model', t = m.t.slice(0, 3000), l = turns[turns.length - 1]; if(l && l.role === role) l.parts[0].text += '\n' + t; else turns.push({ role, parts:[{ text:t }] }); }
+  while(turns.length && turns[0].role !== 'user') turns.shift();
+  AI.h.push({ r:'u', t:q }); AI.busy = true; AI.st = '생각하는 중'; render();
+  const ac = new AbortController(); AI.ctrl = ac; const log = [];
+  try{
+    const contents = [...turns, { role:'user', parts:[{ text:ctxText() + '\n\n[질문]\n' + q }] }];
+    let text = '';
+    for(let r = 0; r < 8; r++){
+      const body = { systemInstruction:{ parts:[{ text:SYS }] }, contents, generationConfig:{ temperature:.45 } }; if(r < 7) body.tools = TOOLS;
+      const res = await gGen(apiKey(), body, ac.signal);
+      if(!res || !res.ok){
+        const c = res ? res.status : 0;
+        AI.h.push({ r:'a', t:c === 429 ? 'Gemini 무료 사용 한도를 넘었습니다. 잠시 뒤 다시 하거나 질문을 짧게 해 보세요. 하루 한도라면 내일 다시 쓸 수 있습니다.' : c === 400 ? '요청을 처리하지 못했습니다. 질문을 나누어 다시 해 보세요.' : (c === 401 || c === 403) ? 'Gemini API 키가 올바르지 않거나 권한이 없습니다. ⋯ 메뉴 → “API 키 · 설정”에서 확인해 주세요.' : '답을 받지 못했습니다(' + (c || '연결 실패') + '). 인터넷을 확인하고 다시 시도해 주세요.', err:1 });
+        return;
+      }
+      const j = await res.json(), parts = ((((j.candidates || [])[0] || {}).content || {}).parts) || [], calls = parts.filter(x => x.functionCall);
+      if(!calls.length){ text = parts.map(x => x.text || '').join('').trim(); break; }
+      contents.push({ role:'model', parts });
+      const back = [];
+      for(const x of calls){
+        const nm = x.functionCall.name, a = x.functionCall.args || {};
+        AI.st = ({ get_passage:'본문을 읽는 중', search_bible:'말씀을 찾는 중', open_passage:'본문으로 이동하는 중', get_plan_day:'통독표를 보는 중' })[nm] || '앱에서 작업하는 중'; render();
+        let out; try{ out = await runTool(nm, a, log); }catch(e){ out = '도구 오류: ' + (e && e.message ? e.message : e); }
+        if(ac.signal.aborted) throw new DOMException('abort', 'AbortError');
+        back.push({ functionResponse:{ name:nm, response:{ result:out } } });
+      }
+      contents.push({ role:'user', parts:back }); AI.st = '생각하는 중'; render();
+    }
+    if(!text){ AI.h.push({ r:'a', t:'답을 만들지 못했습니다. 질문을 바꾸거나 더 구체적으로 다시 해 보세요.', err:1 }); return; }
+    AI.h.push({ r:'a', t:text, m:log.length ? '사용한 기능: ' + Array.from(new Set(log)).join(' · ') : '' }); saveHist();
+  }catch(e){
+    if(e && e.name === 'AbortError') AI.h.push({ r:'a', t:'멈췄습니다.', err:1 });
+    else { console.error('[AI]', e); AI.h.push({ r:'a', t:'AI 응답을 받지 못했습니다. 인터넷을 확인하고 다시 시도해 주세요.', err:1 }); }
+  }finally{ AI.busy = false; AI.ctrl = null; if(AI.ask){ const r = AI.ask.res; AI.ask = null; r(false); } render(); }
+}
+
+/* ================= 설정(API 키·버튼) ================= */
+function openSettings(first){
+  const p = $('#aid-set'); if(!p) return;
+  const own = keyOwn(), nm = keyNm();
+  const fade = lsg(K.fade) == null ? 3000 : +lsg(K.fade);
+  p.innerHTML =
+    '<header class="aid-head"><b>API 키 · 설정</b><button type="button" class="aid-ib" id="aids-x" aria-label="닫기">' + ICON.close + '</button></header>' +
+    '<div class="body">' +
+      '<h4>Gemini API 키</h4>' +
+      '<div class="stat" id="aids-stat"></div>' +
+      '<small>AI 도우미는 Google Gemini를 씁니다. 키는 무료로 만들 수 있고(무료 사용량 한도 있음), 이 기기 안에만 저장되며 다른 곳으로 보내지 않습니다.</small>' +
+      '<a class="aid-link" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">API 키 발급받기 ↗</a>' +
+      '<ol><li>위 버튼을 눌러 Google 계정으로 로그인합니다.</li><li><b>키 만들기(Create API key)</b>를 누릅니다.</li><li>만들어진 키(AIza…로 시작)를 복사해 아래에 붙여넣고 <b>저장</b>을 누릅니다.</li></ol>' +
+      '<input id="aids-key" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="AIza…" value="' + own.replace(/"/g, '') + '">' +
+      '<div class="btns"><button type="button" class="pri" id="aids-save">저장</button><button type="button" id="aids-test">연결 확인</button><button type="button" id="aids-del">키 지우기</button></div>' +
+      '<div class="sec"><h4>플로팅 버튼</h4><small>일정 시간 건드리지 않으면 거의 투명해져 본문을 가리지 않습니다. 흐려진 상태에서는 한 번 눌러 깨운 뒤 다시 누르면 열립니다. 끌어서 원하는 곳으로 옮길 수 있습니다.</small>' +
+        '<div class="btns" style="align-items:center"><select id="aids-fade"><option value="0">흐리게 안 함</option><option value="2000">2초 뒤</option><option value="3000">3초 뒤</option><option value="5000">5초 뒤</option><option value="10000">10초 뒤</option></select>' +
+        '<button type="button" id="aids-fabreset">버튼 위치 처음대로</button></div></div>' +
+      '<div class="sec"><h4>창 위치</h4><small>폰처럼 좁은 화면은 아래, 태블릿·폴더블은 좌·우 사이드바로 열립니다. 창이 열리면 본문 폭이 줄어든 만큼 맞춰집니다. 위쪽 아이콘으로도 바꿀 수 있습니다.</small>' +
+        '<div class="btns"><select id="aids-dock"><option value="auto">자동</option><option value="right">오른쪽</option><option value="left">왼쪽</option><option value="bottom">아래</option></select></div></div>' +
+    '</div>';
+  p.hidden = false;
+  const stat = $('#aids-stat', p);
+  const setStat = () => { const o = keyOwn(), n = keyNm(); stat.textContent = o ? '✓ 이 기기에 저장된 키를 쓰는 중입니다.' : n ? '✓ 늘메모에 저장된 키를 읽어 쓰는 중입니다. 따로 넣으면 그 키를 씁니다.' : '키가 아직 없습니다. 아래 순서대로 발급받아 넣어 주세요.'; };
+  setStat();
+  $('#aids-fade', p).value = String([0, 2000, 3000, 5000, 10000].includes(fade) ? fade : 3000);
+  $('#aids-dock', p).value = dockPref();
+  $('#aids-x', p).addEventListener('click', closeSettings);
+  $('#aids-save', p).addEventListener('click', () => { const v = $('#aids-key', p).value.trim(); if(!v){ stat.textContent = '키를 입력해 주세요.'; return; } lss(K.key, v); setStat(); stat.textContent += ' (저장했습니다)'; });
+  $('#aids-del', p).addEventListener('click', () => { lsd(K.key); $('#aids-key', p).value = ''; setStat(); });
+  $('#aids-test', p).addEventListener('click', async () => {
+    const v = $('#aids-key', p).value.trim() || apiKey(); if(!v){ stat.textContent = '확인할 키가 없습니다.'; return; }
+    stat.textContent = '확인하는 중…';
+    try{
+      const res = await gGen(v, { contents:[{ parts:[{ text:'"확인"이라고만 답하세요.' }] }], generationConfig:{ maxOutputTokens:64 } });
+      if(res && res.ok) stat.textContent = '✓ 연결되었습니다. 이 키로 AI 도우미를 쓸 수 있습니다.';
+      else if(res && res.status === 429) stat.textContent = '키는 확인되었지만 지금은 무료 사용 한도를 넘은 상태입니다. 잠시 뒤 다시 해 보세요.';
+      else if(res && (res.status === 400 || res.status === 401 || res.status === 403)) stat.textContent = '✕ 키가 올바르지 않거나 권한이 없습니다. 다시 복사해 붙여넣어 주세요.';
+      else stat.textContent = '✕ 확인하지 못했습니다(' + (res ? res.status : '연결 실패') + ').';
+    }catch(e){ stat.textContent = '✕ 연결하지 못했습니다. 인터넷을 확인해 주세요.'; }
+  });
+  $('#aids-fade', p).addEventListener('change', e => { lss(K.fade, e.target.value); fabWake(); });
+  $('#aids-fabreset', p).addEventListener('click', () => { lsd(K.fab); placeFab(); });
+  $('#aids-dock', p).addEventListener('change', e => { if(e.target.value === 'auto') lsd(K.dock); else lss(K.dock, e.target.value); layout(); });
+  if(first) setTimeout(() => { try{ $('#aids-key', p).focus(); }catch(e){} }, 50);
+}
+function closeSettings(){ const p = $('#aid-set'); if(p){ p.hidden = true; p.replaceChildren(); } }
+
+/* ================= 시작 ================= */
+function init(){
+  if(!document.body) return;
+  buildDock(); buildFab(); layout();
+  let rz = 0;
+  window.addEventListener('resize', () => { if(_disp) return; clearTimeout(rz); rz = setTimeout(layout, 60); });
+  window.addEventListener('orientationchange', () => setTimeout(layout, 250));
+  // 가상 키보드가 올라오면 아래 창을 키보드 위로
+  if(window.visualViewport){
+    const vv = window.visualViewport;
+    const kb = () => { const k = Math.max(0, innerHeight - vv.height - vv.offsetTop); document.documentElement.style.setProperty('--aid-kb', (k > 80 ? k : 0) + 'px'); };
+    vv.addEventListener('resize', kb); vv.addEventListener('scroll', kb);
+  }
+  // 화면이 바뀌면 추천 질문 갱신
+  let lastView = '';
+  setInterval(() => { if(!AI.open) return; const k = viewLabel(); if(k !== lastView){ lastView = k; updateChips(); if(!AI.h.length && !AI.busy) render(); } }, 1200);
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && AI.open && document.activeElement && document.activeElement.closest && document.activeElement.closest('#ai-dock')) toggle(false); });
+  window.NeulAI = { open:() => toggle(true), close:() => toggle(false), toggle:() => toggle(), layout };
+}
+if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+
+</script>
+<!--AI-END-->
 </body>
 </html>
